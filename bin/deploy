@@ -1,0 +1,3 @@
+#!/bin/bash
+cat prod.yaml | sed s/"__buildversion__"/"$(cat version)"/ | sed s/"__dataset__"/"$(cat dataset)"/ | kubectl delete -f -
+cat prod.yaml | sed s/"__buildversion__"/"$(cat version)"/ | sed s/"__dataset__"/"$(cat dataset)"/ | kubectl create -f -

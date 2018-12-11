@@ -1,0 +1,874 @@
+{
+    "aliases": {
+        "blekko_unique": {},
+        "news-may-2018-alias": {}
+    },
+    "mappings": {
+        "blekko_news": {
+            "_all": {
+                "enabled": false
+            },
+            "properties": {
+                "categories": {
+                    "type": "keyword",
+                    "index": false
+                },
+                "chrondate": {
+                    "type": "date",
+                    "format": "epoch_second"
+                },
+                "concepts": {
+                    "type": "nested",
+                    "properties": {
+                        "census": {
+                            "type": "text",
+                            "index": false
+                        },
+                        "crunchbase": {
+                            "type": "keyword",
+                            "index": false
+                        },
+                        "dbpedia": {
+                            "type": "keyword"
+                        },
+                        "geo": {
+                            "type": "text"
+                        },
+                        "knowledgeGraph": {
+                            "type": "nested",
+                            "properties": {
+                                "typeHierarchy": {
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "relevance": {
+                            "type": "double"
+                        },
+                        "text": {
+                            "type": "text"
+                        },
+                        "website": {
+                            "type": "text",
+                            "index": false
+                        },
+                        "yago": {
+                            "type": "keyword",
+                            "index": false
+                        }
+                    }
+                },
+                "counter": {
+                    "type": "long"
+                },
+                "docSentiment": {
+                    "type": "nested",
+                    "properties": {
+                        "mixed": {
+                            "type": "keyword"
+                        },
+                        "score": {
+                            "type": "double"
+                        },
+                        "type": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "enrichedTitle": {
+                    "type": "nested",
+                    "properties": {
+                        "concepts": {
+                            "type": "nested",
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "raw": {
+                                            "type": "keyword"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "entities": {
+                            "type": "nested",
+                            "properties": {
+                                "buy_grp_id": {
+                                    "type": "keyword"
+                                },
+                                "buy_grp_name": {
+                                    "type": "text"
+                                },
+                                "comp_name": {
+                                    "type": "text"
+                                },
+                                "dom_client_id": {
+                                    "type": "keyword"
+                                },
+                                "du_duns_num": {
+                                    "type": "keyword"
+                                },
+                                "duns_num": {
+                                    "type": "keyword"
+                                },
+                                "duns_trade_style_name": {
+                                    "type": "text"
+                                },
+                                "gbl_buy_grp_id": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "gbl_buy_grp_name": {
+                                    "type": "text"
+                                },
+                                "gbl_client_id": {
+                                    "type": "keyword"
+                                },
+                                "gbl_client_name": {
+                                    "type": "text"
+                                },
+                                "glb_buy_grp_id": {
+                                    "type": "keyword"
+                                },
+                                "gu_duns_num": {
+                                    "type": "keyword"
+                                },
+                                "new_text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "text": {
+                                    "type": "text"
+                                },
+                                "type": {
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "keywords": {
+                            "type": "nested",
+                            "properties": {
+                                "text": {
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "relations": {
+                            "type": "nested",
+                            "properties": {
+                                "action": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "text": {
+                                            "type": "text"
+                                        },
+                                        "verb": {
+                                            "type": "nested",
+                                            "properties": {
+                                                "text": {
+                                                    "type": "text"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "location": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                },
+                                "object": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                },
+                                "subject": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "text": {
+                            "type": "text"
+                        }
+                    }
+                },
+                "entities": {
+                    "type": "nested",
+                    "properties": {
+                        "buy_grp_id": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "buy_grp_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "comp_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "disambiguated": {
+                            "type": "nested",
+                            "properties": {
+                                "buy_grp_id": {
+                                    "type": "keyword"
+                                },
+                                "buy_grp_name": {
+                                    "type": "text"
+                                },
+                                "census": {
+                                    "type": "keyword",
+                                    "index": false
+                                },
+                                "ciaFactbook": {
+                                    "type": "keyword",
+                                    "index": false
+                                },
+                                "comp_name": {
+                                    "type": "text"
+                                },
+                                "crunchbase": {
+                                    "type": "keyword",
+                                    "index": false
+                                },
+                                "dbpedia": {
+                                    "type": "text"
+                                },
+                                "dom_client_id": {
+                                    "type": "keyword"
+                                },
+                                "du_duns_num": {
+                                    "type": "keyword"
+                                },
+                                "duns_num": {
+                                    "type": "keyword"
+                                },
+                                "duns_trade_style_name": {
+                                    "type": "text"
+                                },
+                                "gbl_buy_grp_name": {
+                                    "type": "text"
+                                },
+                                "gbl_client_id": {
+                                    "type": "keyword"
+                                },
+                                "gbl_client_name": {
+                                    "type": "text"
+                                },
+                                "geo": {
+                                    "type": "text"
+                                },
+                                "glb_buy_grp_id": {
+                                    "type": "keyword"
+                                },
+                                "gu_duns_num": {
+                                    "type": "keyword"
+                                },
+                                "knowledgeGraph": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "typeHierarchy": {
+                                            "type": "text"
+                                        }
+                                    }
+                                },
+                                "name": {
+                                    "type": "text"
+                                },
+                                "suType": {
+                                    "type": "text"
+                                },
+                                "subType": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "website": {
+                                    "type": "text"
+                                },
+                                "yago": {
+                                    "type": "text",
+                                    "index": false
+                                }
+                            }
+                        },
+                        "dom_client_id": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "du_duns_num": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "duns_num": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "duns_trade_style_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "gbl_buy_grp_id": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "gbl_buy_grp_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "gbl_client_id": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "gbl_client_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "gu_duns_num": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "knowledgeGraph": {
+                            "properties": {
+                                "typeHierarchy": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "new_text": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "relevance": {
+                            "type": "double"
+                        },
+                        "text": {
+                            "type": "text"
+                        },
+                        "type": {
+                            "type": "text"
+                        }
+                    }
+                },
+                "events": {
+                    "type": "nested",
+                    "properties": {
+                        "event_name": {
+                            "type": "keyword"
+                        },
+                        "event_score": {
+                            "type": "double"
+                        }
+                    }
+                },
+                "events_core": {
+                    "properties": {
+                        "event_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "event_score": {
+                            "type": "float"
+                        }
+                    }
+                },
+                "industries": {
+                    "properties": {
+                        "industry_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "industry_score": {
+                            "type": "float"
+                        }
+                    }
+                },
+                "industries_core": {
+                    "properties": {
+                        "industry_name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "industry_score": {
+                            "type": "float"
+                        }
+                    }
+                },
+                "ingestion_time": {
+                    "type": "date",
+                    "format": "epoch_second"
+                },
+                "keywords": {
+                    "type": "nested",
+                    "properties": {
+                        "knowledgeGraph": {
+                            "type": "nested",
+                            "properties": {
+                                "typeHierarchy": {
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "relevance": {
+                            "type": "double"
+                        },
+                        "text": {
+                            "type": "text"
+                        }
+                    }
+                },
+                "lang": {
+                    "type": "keyword"
+                },
+                "language": {
+                    "type": "keyword"
+                },
+                "last_crawled": {
+                    "type": "date",
+                    "format": "epoch_second"
+                },
+                "publicationDate": {
+                    "type": "nested",
+                    "properties": {
+                        "confident": {
+                            "type": "keyword",
+                            "index": false
+                        },
+                        "date": {
+                            "type": "keyword",
+                            "index": false
+                        }
+                    }
+                },
+                "relations": {
+                    "type": "nested",
+                    "properties": {
+                        "action": {
+                            "type": "nested",
+                            "properties": {
+                                "lemmatized": {
+                                    "type": "text"
+                                },
+                                "text": {
+                                    "type": "text"
+                                },
+                                "verb": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "negated": {
+                                            "type": "text"
+                                        },
+                                        "tense": {
+                                            "type": "text"
+                                        },
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "location": {
+                            "type": "nested",
+                            "properties": {
+                                "text": {
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "object": {
+                            "type": "nested",
+                            "properties": {
+                                "entities": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "disambiguated": {
+                                            "properties": {
+                                                "crunchbase": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "dbpedia": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "name": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "subType": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "website": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "yago": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "knowledgeGraph": {
+                                            "properties": {
+                                                "typeHierarchy": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                },
+                                "keywords": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "knowledgeGraph": {
+                                            "properties": {
+                                                "typeHierarchy": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                },
+                                "text": {
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "subject": {
+                            "type": "nested",
+                            "properties": {
+                                "entities": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "disambiguated": {
+                                            "properties": {
+                                                "crunchbase": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "dbpedia": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "name": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "subType": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "website": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "yago": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "knowledgeGraph": {
+                                            "properties": {
+                                                "typeHierarchy": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                },
+                                "keywords": {
+                                    "type": "nested",
+                                    "properties": {
+                                        "knowledgeGraph": {
+                                            "properties": {
+                                                "typeHierarchy": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "text": {
+                                            "type": "text"
+                                        }
+                                    }
+                                },
+                                "text": {
+                                    "type": "text"
+                                }
+                            }
+                        }
+                    }
+                },
+                "source": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "taxonomy": {
+                    "type": "nested",
+                    "properties": {
+                        "confident": {
+                            "type": "keyword",
+                            "index": false
+                        },
+                        "label": {
+                            "type": "text"
+                        },
+                        "score": {
+                            "type": "double"
+                        }
+                    }
+                },
+                "text": {
+                    "type": "text"
+                },
+                "timestamp": {
+                    "type": "date"
+                },
+                "title": {
+                    "type": "text"
+                },
+                "url": {
+                    "type": "text"
+                }
+            }
+        }
+    },
+    "settings": {
+        "index": {
+            "search": {
+                "slowlog": {
+                    "threshold": {
+                        "fetch": {
+                            "info": "800ms"
+                        },
+                        "query": {
+                            "info": "1s"
+                        }
+                    }
+                }
+            },
+            "indexing": {
+                "slowlog": {
+                    "threshold": {
+                        "index": {
+                            "info": "1s"
+                        }
+                    }
+                }
+            },
+            "number_of_shards": "10"
+        }
+    }
+}

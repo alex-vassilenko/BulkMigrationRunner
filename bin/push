@@ -1,0 +1,11 @@
+#!/bin/bash
+
+remote="cedp-docker-local.artifactory.swg-devops.com"
+folder="cao-core"
+version=$(cat version)
+app="elastic-data-migration"
+tag="${remote}/${folder}/${app}:${version}"
+
+docker login ${remote} -u ${CI_USER} -p ${CI_PASS}
+docker push ${tag}
+docker logout

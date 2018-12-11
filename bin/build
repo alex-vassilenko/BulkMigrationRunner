@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo $(date +%Y%m%d_%H%M%S) > version
+remote="cedp-docker-local.artifactory.swg-devops.com"
+folder="cao-core"
+app="elastic-data-migration"
+version="$(cat version)"
+tag="${remote}/${folder}/${app}:${version}"
+docker_context="."
+
+docker build --no-cache -f Dockerfile -t ${tag} ${docker_context}

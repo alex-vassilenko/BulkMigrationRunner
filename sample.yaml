@@ -1,0 +1,65 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: elastic-data-migration-__dataset__
+  namespace: <namespace>
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: elastic-data-migration-__dataset__
+    spec:
+      containers:
+      - name: elastic-data-migration-__dataset__
+        image: host/path:__buildversion__
+        env:
+        # Source configuration
+        - name: SOURCE_HOST
+          value: 
+        - name: SOURCE_INDEX
+          value:
+        - name: SOURCE_USERNAME
+          value:
+        - name: SOURCE_PASSWORD
+          value:
+        - name: SOURCE_PROTOCOL
+          value:
+        - name: SOURCE_PORT
+          value:
+
+        # Target configuration
+        - name: TARGET_HOST
+          value:
+        - name: TARGET_INDEX
+          value:
+        - name: TARGET_MAPPING
+          value:
+        - name: TARGET_JKSFILE
+          value:
+        - name: TARGET_JKSPASS
+          value:
+        - name: TARGET_USERNAME
+          value:
+        - name: TARGET_PASSWORD
+          value:
+        - name: TARGET_PROTOCOL
+          value:
+        - name: TARGET_PORT
+          value:
+          
+        # Ingestion configuration
+        - name: SCROLL_SIZE
+          value:
+        - name: SCROLL_INTERVAL
+          value:
+        resources:
+          requests:
+            cpu: 1
+            memory: 100Mi
+          limits:
+            cpu: 2
+            memory: 5Gi
+      imagePullSecrets:
+        - name: artifactory-registry-secret

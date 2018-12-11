@@ -1,0 +1,146 @@
+{
+    "aliases": {},
+    "mappings": {
+        "dnb_new": {
+            "_all": {
+                "enabled": false
+            },
+            "properties": {
+                "BUY_GRP_ID": {
+                    "type": "keyword",
+                    "null_value": "NULL"
+                },
+                "BUY_GRP_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "COMP_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "CUST_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "CUST_NO": {
+                    "type": "keyword",
+                    "null_value": "NULL"
+                },
+                "DOM_CLIENT_ID": {
+                    "type": "keyword",
+                    "null_value": "NULL"
+                },
+                "DOM_CLIENT_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "DUNS_CITY_NAME": {
+                    "type": "text"
+                },
+                "DUNS_CTRY_NAME": {
+                    "type": "text"
+                },
+                "DUNS_NUM": {
+                    "type": "keyword"
+                },
+                "DUNS_STAT_CD": {
+                    "type": "long"
+                },
+                "DUNS_ST_PROV_NAME": {
+                    "type": "text"
+                },
+                "DUNS_TRADE_STYLE_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "DU_DUNS_NUM": {
+                    "type": "keyword"
+                },
+                "FAM_MEM_GBL_CNT": {
+                    "type": "text"
+                },
+                "GBL_BUY_GRP_ID": {
+                    "type": "keyword",
+                    "null_value": "NULL"
+                },
+                "GBL_BUY_GRP_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "GBL_CLIENT_ID": {
+                    "type": "keyword",
+                    "null_value": "NULL"
+                },
+                "GBL_CLIENT_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "GBL_HRC_CD": {
+                    "type": "text"
+                },
+                "GU_DUNS_NUM": {
+                    "type": "keyword"
+                },
+                "IBM_WW_CLIENT_ID": {
+                    "type": "keyword",
+                    "null_value": "NULL"
+                },
+                "IBM_WW_CLIENT_NAME": {
+                    "type": "text",
+                    "analyzer": "analyzer_startswith"
+                },
+                "LEGACY_CREATE_DT": {
+                    "type": "text"
+                },
+                "SAP_CUSTOMER_NO": {
+                    "type": "keyword",
+                    "null_value": "NULL"
+                },
+                "USD_ANL_SALES_AMT": {
+                    "type": "double"
+                }
+            }
+        }
+    },
+    "settings": {
+        "index": {
+            "search": {
+                "slowlog": {
+                    "threshold": {
+                        "fetch": {
+                            "info": "800ms"
+                        },
+                        "query": {
+                            "info": "1s"
+                        }
+                    }
+                }
+            },
+            "indexing": {
+                "slowlog": {
+                    "threshold": {
+                        "index": {
+                            "info": "1s"
+                        }
+                    }
+                }
+            },
+            "number_of_shards": "10",
+            "provided_name": "dnb_jan2018",
+            "creation_date": "1537275929019",
+            "analysis": {
+                "analyzer": {
+                    "analyzer_startswith": {
+                        "filter": "lowercase",
+                        "tokenizer": "keyword"
+                    }
+                }
+            },
+            "number_of_replicas": "1",
+            "uuid": "Irr5clSISwqgqr7z5Cxy6Q",
+            "version": {
+                "created": "6020499"
+            }
+        }
+    }
+}
