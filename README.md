@@ -16,3 +16,6 @@ Migrate a series of Elasticsearch indices between clusters in different location
 2. Application implements `wait and retry` and `last resort` logic for failures.
 3. Multiple containers run on Kubernetes namespace to parallelise execution.
 4. Reach the maximum optimal utilization of network resources.
+
+## Challenges
+1. Reading from a scroll and using recursive retry logic seems to make the scroll shorter.
