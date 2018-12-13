@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for dataset in 'jan-2018' 'feb-2018' 'mar-2018' 'apr-2018'
+for dataset in 'jul-2017' 'aug-2017' 'sep-2017' 'oct-2017' 'nov-2017' 'dec-2017'
 do
     echo $dataset > dataset
     . bin/deploy
