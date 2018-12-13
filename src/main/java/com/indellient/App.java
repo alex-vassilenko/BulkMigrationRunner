@@ -1,6 +1,8 @@
 package com.indellient;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.net.ssl.SSLContext;
@@ -12,6 +14,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.ssl.SSLContexts;
+import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -28,8 +31,8 @@ import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
-public class App implements Runnable {
-	
+public class App implements Runnable 
+{	
 	// Source configuration
 	private static final String SOURCE_HOST = System.getenv("SOURCE_HOST");
 	private static final String SOURCE_USERNAME = System.getenv("SOURCE_USERNAME");
@@ -52,6 +55,9 @@ public class App implements Runnable {
 	// Ingestion configuration
 	private static final int    SCROLL_SIZE = Integer.parseInt(System.getenv("SCROLL_SIZE"));
 	private static final long   SCROLL_INTERVAL = Long.parseLong(System.getenv("SCROLL_INTERVAL"));
+	private static final int    BULK_RETRY = 3;
+	private static final String BULK_FILE = "failedDocs.txt";
+	private static final int    HOLD_BACK = 30000;
 	
 	private App()
 	{}
@@ -80,50 +86,51 @@ public class App implements Runnable {
 				.query(QueryBuilders.matchAllQuery())
 				.size(SCROLL_SIZE);
 		searchRequest.source(searchSourceBuilder);
-
-		//Initialize the search context by sending the initial SearchRequest
 		SearchResponse searchResponse;
+		
+		// Scroll through
 		try 
 		{
-			searchResponse = sourceClient.search(searchRequest);
-			String scrollId = searchResponse.getScrollId();
-			SearchHit[] searchHits = searchResponse.getHits().getHits();
-			
 			// Start measures
 			int numDocuments = 0;
 			long startTime = System.currentTimeMillis();
 			
+			// Get hits
+			searchResponse = sourceClient.search(searchRequest);
+			String scrollId = searchResponse.getScrollId();
+			SearchHit[] searchHits = searchResponse.getHits().getHits();
+			
 			// Commit first batch
-			BulkResponse response = commit(searchHits, targetClient, TARGET_INDEX, TARGET_MAPPING);
-			int responseCode = response.status().getStatus();
+			BulkResponse response =
+					commit(searchHits, targetClient, TARGET_INDEX, TARGET_MAPPING, BULK_RETRY);
 			numDocuments += searchHits.length;
-			printMessage(numDocuments, startTime, responseCode);
+			printMessage(numDocuments, startTime);
 			
 			while (searchHits != null && searchHits.length > 0) 
-			{ 
-			    SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId)
+			{
+			    SearchScrollRequest scrollRequest = 
+			    		new SearchScrollRequest(scrollId)
 			    		.scroll(scroll);
 			    searchResponse = sourceClient.searchScroll(scrollRequest);
 			    scrollId = searchResponse.getScrollId();
 			    searchHits = searchResponse.getHits().getHits();
 			    if (searchHits.length == 0) 
 			    {
-			    	System.out.println("Breaking out of loop. Hits size: " + searchHits.length);
 			    	break;
 			    }
-			    response = commit(searchHits, targetClient, TARGET_INDEX, TARGET_MAPPING);
-			    responseCode = response.status().getStatus();
+			    response = 
+			    		commit(searchHits, targetClient, TARGET_INDEX, TARGET_MAPPING, BULK_RETRY);
 			    numDocuments += searchHits.length;
-			    printMessage(numDocuments, startTime, responseCode);
+			    printMessage(numDocuments, startTime);
 			}
 			System.out.println("Bye, hope all you data is safe and sound.");
 			
 		} 
-		catch (IOException e) 
+		catch (IOException | InterruptedException e) 
 		{
 			e.printStackTrace();
 		} 
-	} 
+	}
 	
 	/**
 	 * Commits a bulk request to ES
@@ -132,12 +139,19 @@ public class App implements Runnable {
 	 * @param index
 	 * @param mapping
 	 * @return
+	 * @throws InterruptedException 
 	 * @throws IOException
 	 */
-	private static BulkResponse commit(SearchHit[] searchHits, RestHighLevelClient client, 
-			String index, String mapping) 
-			throws IOException 
+	private BulkResponse commit(SearchHit[] searchHits, RestHighLevelClient client, 
+			String index, String mapping, int retry) 
+					throws InterruptedException
 	{
+		if (retry == 0)
+		{
+			System.out.println("Last resort: write to file.");
+			writeBulkToFile(searchHits);
+			return null;
+		}
 		BulkRequest bulkRequest = new BulkRequest();
 		for (SearchHit hit : searchHits) 
 		{
@@ -146,7 +160,68 @@ public class App implements Runnable {
 	    	indexRequest.source(document, XContentType.JSON);
 	    	bulkRequest.add(indexRequest);
 		}
-		return client.bulk(bulkRequest);
+		BulkResponse bulkResponse = null;
+		try 
+		{
+			bulkResponse = client.bulk(bulkRequest);
+			if (bulkResponse.hasFailures())
+			{
+				for (BulkItemResponse bulkItem : bulkResponse)
+				{
+					if (bulkItem.isFailed())
+					{
+						int requestId = bulkItem.getItemId();
+						IndexRequest request = (IndexRequest) bulkRequest.requests().get(requestId);
+						String requestDoc = request.source().utf8ToString();
+						writeDocToFile(requestDoc);
+					}
+				}
+			}
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("# Retries: " + retry + " #");
+			Thread.sleep(HOLD_BACK);
+			commit(searchHits, client, index, mapping, --retry);
+		}
+		return bulkResponse;
+	}
+	
+	private void writeBulkToFile(SearchHit[] searchHits) 
+	{
+		File file = new File(BULK_FILE);
+		for (SearchHit hit : searchHits)
+		{
+			try 
+			{
+				FileWriter pw = new FileWriter(file, true);
+				BufferedWriter bw = new BufferedWriter(pw);
+				bw.write(hit.getSourceAsString());
+				bw.newLine();
+				bw.close();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void writeDocToFile(String doc) 
+	{
+		File file = new File(BULK_FILE);
+		try 
+		{
+			FileWriter pw = new FileWriter(file, true);
+			BufferedWriter bw = new BufferedWriter(pw);
+			bw.write(doc);
+			bw.newLine();
+			bw.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -223,12 +298,11 @@ public class App implements Runnable {
 	 * @param startTime
 	 * @param responseCode
 	 */
-	private static void printMessage(int docCount, long startTime, int responseCode) 
+	private static void printMessage(int docCount, long startTime) 
 	{
 		double timeSeconds = (System.currentTimeMillis() - startTime) / 1000.0;
 		String msg = "Document: " + docCount 
-				+ " | Time: " + timeSeconds 
-				+ " | Status: " + responseCode;
+				+ " | Time: " + timeSeconds;
 		System.out.println(msg);
 	}
 }
