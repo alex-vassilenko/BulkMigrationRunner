@@ -55,9 +55,9 @@ public class App implements Runnable
 	// Ingestion configuration
 	private static final int    SCROLL_SIZE = Integer.parseInt(System.getenv("SCROLL_SIZE"));
 	private static final long   SCROLL_INTERVAL = Long.parseLong(System.getenv("SCROLL_INTERVAL"));
-	private static final int    BULK_RETRY = 3;
-	private static final String BULK_FILE = "failedDocs.txt";
-	private static final int    HOLD_BACK = 30000;
+	private static final int    BULK_RETRY = Integer.parseInt(System.getenv("BULK_RETRY"));
+	private static final String BULK_FILE = System.getenv("BULK_FILE");
+	private static final int    HOLD_BACK = Integer.parseInt(System.getenv("HOLD_BACK"));
 	
 	private App()
 	{}
